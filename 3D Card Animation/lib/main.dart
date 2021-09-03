@@ -104,96 +104,99 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
           elevation: 0,
         ),
         body: SafeArea(
-          child: LayoutBuilder( 
+          child: LayoutBuilder(
             builder: (context, consraints) {
-              return Align(
-                alignment: Alignment.center,
-                child: GestureDetector(
-                  onTap: () {
-                    if (_secondAnimationStarted) {
-                      _secondAnimationStarted = false;
-                      _animationController2.reverse().then((value) {
-                        if (_firstAnimationStarted) {
-                          print("reverse");
-                          _firstAnimationStarted = false;
-                          _animationController.reverse();
-                        }
-                      });
-                    } else if (_firstAnimationStarted) {
-                      print("reverse");
-                      _firstAnimationStarted = false;
-                      _animationController.reverse();
-                    }
-                  },
-                  child: Container(
-                    color: Colors.white,
-                    height: consraints.maxHeight,
-                    width: consraints.maxWidth / 2.5,
-                    child: GestureDetector(
-                      onTap: () {
-                        if (!_firstAnimationStarted) {
-                          print("forward");
-                          _firstAnimationStarted = true;
-                          _animationController.forward();
-                        }
-                      },
-                      child: Stack(
-                        children: [
-                          ...List.generate(
-                            5,
-                            (i) => Positioned(
-                              top: _slideValue * 100 +
-                                  (i * _slideValue * 65) +
-                                  (heightDirection(i) * _heightValue * 120),
-                              // + (consraints.maxHeight / 2 - 75),
-                              // left: 0,
-                              // right: 0,
-                              child: Transform(
-                                alignment: Alignment.center,
-                                transform: Matrix4.identity()
-                                  ..setEntry(3, 2, 0.001)
-                                  ..rotateX(_slideValue == 1.0
-                                      ? !_secondAnimationStarted
-                                          ? 13
-                                          : 0
-                                      : 0),
-                                child: AbsorbPointer(
-                                  absorbing: !_firstAnimationStarted,
-                                  child: InkWell(
-                                    onTap: () {
-                                      if (_secondAnimationStarted) {
-                                        _secondAnimationStarted = false;
-                                        _animationController2
-                                            .reverse()
-                                            .then((value) {
-                                          if (!_secondAnimationStarted &&
-                                              selectedCardIndex != i) {
-                                            _cardSelected(index: i);
-                                            _secondAnimationStarted = true;
-                                            _animationController2.forward();
-                                          }
-                                        });
-                                      } else if (!_secondAnimationStarted) {
-                                        _cardSelected(index: i);
-                                        _secondAnimationStarted = true;
-                                        _animationController2.forward();
-                                      }
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: colors[i % 5],
+              return GestureDetector(
+                onTap: () {
+                  print("---");
+                  if (_secondAnimationStarted) {
+                    _secondAnimationStarted = false;
+                    _animationController2.reverse().then((value) {
+                      if (_firstAnimationStarted) {
+                        print("reverse");
+                        _firstAnimationStarted = false;
+                        _animationController.reverse();
+                      }
+                    });
+                  } else if (_firstAnimationStarted) {
+                    print("reverse");
+                    _firstAnimationStarted = false;
+                    _animationController.reverse();
+                  }
+                },
+                child: Container(
+                  color: Colors.white,
+                  height: consraints.maxHeight,
+                  width: consraints.maxWidth,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: consraints.maxHeight,
+                      width: consraints.maxWidth / 2.5,
+                      child: GestureDetector(
+                        onTap: () {
+                          if (!_firstAnimationStarted) {
+                            print("forward");
+                            _firstAnimationStarted = true;
+                            _animationController.forward();
+                          }
+                        },
+                        child: Stack(
+                          children: [
+                            ...List.generate(
+                              5,
+                              (i) => Positioned(
+                                top: _slideValue * 100 +
+                                    (i * _slideValue * 65) +
+                                    (heightDirection(i) * _heightValue * 120),
+                                child: Transform(
+                                  alignment: Alignment.center,
+                                  transform: Matrix4.identity()
+                                    ..setEntry(3, 2, 0.001)
+                                    ..rotateX(_slideValue == 1.0
+                                        ? !_secondAnimationStarted
+                                            ? 13
+                                            : 0
+                                        : 0),
+                                  child: AbsorbPointer(
+                                    absorbing: !_firstAnimationStarted,
+                                    child: InkWell(
+                                      onTap: () {
+                                        if (_secondAnimationStarted) {
+                                          _secondAnimationStarted = false;
+                                          _animationController2
+                                              .reverse()
+                                              .then((value) {
+                                            if (!_secondAnimationStarted &&
+                                                selectedCardIndex != i) {
+                                              _cardSelected(index: i);
+                                              _secondAnimationStarted = true;
+                                              _animationController2.forward();
+                                            }
+                                          });
+                                        } else if (!_secondAnimationStarted) {
+                                          _cardSelected(index: i);
+                                          _secondAnimationStarted = true;
+                                          _animationController2.forward();
+                                        }
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: colors[i % 5],
+                                        ),
+                                        height: 150,
+                                        width: consraints.maxWidth / 2.5,
                                       ),
-                                      height: 150,
-                                      width: consraints.maxWidth / 2.5,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          // Slider(value: _slideValue, onChanged: _onChangedSlider),
-                        ],
+                            // Slider(value: _slideValue, onChanged: _onChangedSlider),
+                          ],
+                        ),
                       ),
                     ),
                   ),
